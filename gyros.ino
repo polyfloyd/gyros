@@ -25,13 +25,13 @@ void loop() {
     if (x != 0 || y != 0 || z != 0) {
         quat tmp;
         quat qx;
-        const static vec3 axisX = {1, 0, 0};
+        const static vec3 axisX = {0, 1, 0};
         quat_rotate(qx, float(x) / 32000.0, axisX);
         memcpy(tmp, orientation, sizeof(quat));
         quat_mul(orientation, qx, tmp);
 
         quat qy;
-        const static vec3 axisY = {0, 1, 0};
+        const static vec3 axisY = {1, 0, 0};
         quat_rotate(qy, float(y) / 32000.0, axisY);
         memcpy(tmp, orientation, sizeof(quat));
         quat_mul(orientation, qy, tmp);
