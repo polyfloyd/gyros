@@ -28,7 +28,7 @@ void bno055_write(uint8_t reg, uint8_t *buf, size_t bufLen);
 void bno055_write8(uint8_t reg, uint8_t val);
 void bno055_wait_powerup();
 
-int bno055_setup(int8_t map_x, int8_t map_y, int8_t map_z) {
+int bno055_setup() {
     Wire.begin();
 
     Serial.println("# waiting for gyrosensor...");
@@ -108,17 +108,6 @@ int bno055_setup(int8_t map_x, int8_t map_y, int8_t map_z) {
     bno055_write8(BNO055_REG_PAGE_ID, 0);
     bno055_write8(BNO055_REG_SYS_TRIGGER, 0);
     delay(10);
-
-    // Remap the axes.
-    uint8_t conf_x = ((uint8_t)(abs(map_x) & 3) - 1);
-    uint8_t conf_y = ((uint8_t)(abs(map_y) & 3) - 1) << 2;
-    uint8_t conf_z = ((uint8_t)(abs(map_z) & 3) - 1) << 4;
-    bno055_write8(BNO055_REG_AXIS_MAP_CONFIG, conf_z | conf_y | conf_x);
-    // Set the axis sign by taking the sign bit from the mapping.
-    uint8_t sign_x = map_x >> 5 & 4;
-    uint8_t sign_y = map_y >> 6 & 2;
-    uint8_t sign_z = map_z >> 7 & 1;
-    bno055_write8(BNO055_REG_AXIS_MAP_SIGN, sign_x | sign_y | sign_z);
 
     // Switch to a mode to start reading sensor data.
     bno055_write8(BNO055_REG_OPR_MODE, BNO055_OPMODE_NDOF);
